@@ -1,0 +1,68 @@
+---
+project: deblur_gan
+experiment_desc: fpn
+
+train:
+  files_a: /home/jili_cw4/FDC_data/step1[0-9]/*/CAM02/focusStep_*_[vt]*0[0-1][0-8][0-9].tif   #/home/jili_cw4/FDC_data/step[678]/*/CAM02/focusStep_[678]_[vt]*.tif #/home/jili_cw4/FDC_data/step7/Times/CAM02/focusStep_7_timesR*.tif #/home/jili/GOPRO_Large/train/**/blur/*.png # /home/jili/GOPRO_Large/train/GOPR0372*/blur/*.png # /home/jili/ground_truth/train/blur/*01.png #/home/jili/GOPRO_Large/train/**/blur/*.png #&FILES_A /datasets/my_dataset/**/*.jpg
+  files_b: /home/jili_cw4/FDC_data/step1[0-9]/*/CAM01/focusStep_*_[vt]*0[0-1][0-8][0-9].tif #/home/jili_cw4/FDC_data/step[678]/*/CAM01/focusStep_[678]_[vt]*.tif #/home/jili_cw4/FDC_data/step7/Times/CAM01/focusStep_7_timesR*.tif #/home/jili/GOPRO_Large/train/**/sharp/*.png #/home/jili/GOPRO_Large/train/GOPR0372*/sharp/*.png #/home/jili/ground_truth/train/sharp/*01.png #/home/jili/GOPRO_Large/train/**/sharp/*.png #*FILES_A
+  size: &SIZE 512 #800 #512 #256 #step[78]/*/CAM02/focusStep_[78]_[vt]*0[0-1][0-8][0-9].tif [0-4]
+  crop: random
+  preload: &PRELOAD false
+  preload_size: &PRELOAD_SIZE 0
+  bounds: [0,.9] #[0, .9]
+  scope: geometric
+  corrupt: &CORRUPT
+#    - name: cutout
+#      prob: 0.5
+#      num_holes: 3
+#      max_h_size: 25
+#      max_w_size: 25
+#    - name: jpeg
+#      quality_lower: 70
+#      quality_upper: 90
+#    - name: motion_blur
+#    - name: median_blur
+#    - name: gamma
+    - name: rgb_shift
+#    - name: hsv_shift
+#    - name: sharpen
+
+val: #/home/jili_cw4/FDC_data/step[0-9]/*/CAM02/focusStep_[0-9]_[vt]*0[0-1][0-8][0-9].tif
+  files_a: /home/jili_cw4/FDC_data/step1[0-9]/*/CAM02/focusStep_*_[vt]*0[0-1][0-8][0-9].tif #/home/jili_cw4/FDC_data/step[678]/*/CAM02/focusStep_[678]_[vt]*.tif #/home/jili_cw4/FDC_data/step7/Times/CAM02/focusStep_7_timesR*.tif #/home/jili/GOPRO_Large/test/**/blur/*.png #/home/jili/GOPRO_Large/train/GOPR0386*/blur/*.png # /home/jili/ground_truth/test/blur/*01.png #/home/jili/GOPRO_Large/test/**/blur/*.png #*FILES_A
+  files_b: /home/jili_cw4/FDC_data/step1[0-9]/*/CAM01/focusStep_*_[vt]*0[0-1][0-8][0-9].tif #/home/jili_cw4/FDC_data/step[678]/*/CAM01/focusStep_[678]_[vt]*.tif #/home/jili_cw4/FDC_data/step7/Times/CAM01/focusStep_7_timesR*.tif #/home/jili/GOPRO_Large/test/**/sharp/*.png #*FILES_A/home/jili/GOPRO_Large/train/GOPR0386*/sharp/*.png #/home/jili/ground_truth/test/sharp/*01.png #/home/jili/GOPRO_Large/test/**/sharp/*.png #*FILES_A
+  size: *SIZE
+  scope: geometric
+  crop: random #center
+  preload: *PRELOAD
+  preload_size: *PRELOAD_SIZE
+  bounds: [.9,1] #[.9, 1]
+  corrupt: *CORRUPT
+
+phase: train
+warmup_num: 3
+model:
+  g_name: fpn_inceptioncc #unet_skip #fpn_inception #resnet #fpn_inception #unet_skip #fpn_inception #unet_skip #resnet #fpn_inception
+  blocks: 9
+  d_name: double_gan #double_gan #no_gan #double_gan #no_gan #double_gan # may be no_gan, patch_gan, double_gan, multi_scale
+  d_layers: 3
+  content_loss: perceptual #l2 #perceptual #l2 #l1 #perceptual
+  adv_lambda: 0.001
+  disc_loss: wgan-gp
+  learn_residual: True
+  norm_layer: conditional-instance10 #instance #conditional-instance #instance
+  dropout: False #True #False #True
+
+num_epochs: 2000 #500
+train_batches_per_epoch: 1000 #1000 #1000
+val_batches_per_epoch: 10 #100 #100
+batch_size: 1 #1
+image_size: [512,512] #[512, 512] #[800, 800] #[800,800] #[512, 512] #[256, 256]
+
+optimizer:
+  name: adam
+  lr: 0.0001 #0.0001
+scheduler:
+  name: linear
+  start_epoch: 20 #50
+  min_lr: 0.0000001
+
