@@ -13,5 +13,32 @@ Below is the information for the authors.
 
 ** Installation instructions, including any requirements.
 See the +requirement.txt+ to install the dependent packages and librairies.
+ ## Installation instructions, including any requirements.
+See the ```requirement.txt``` to install the dependent packages and librairies.
+
+ ## Usage instructions.
+ + Clone the github repository
+   
+   ```python
+   git clone https://github.com/Chilie/HDC2021_code.git
+   cd HDC2021_code
+   ```
+ + Use ```conda```  constrcut the virtual environment
+    ```python
+    pip3 install virtualenv
+    virtualenv --no-site-packages --python=python3 hdc2021
+    source hdc2021/bin/activate # enter the vironment
+    pip3 install -r requirements.txt # install the dependency 
+    deactivate
+    ```
+ + Use the gdown to obtained the trainning checkpoints in google driver. The following links is used in our evaluations.
+
+   +  0-9 steps: File is readable by anyone at [Here][https://drive.google.com/uc?id=1K6x7WjNfwmYscp8jFTV2hhn2ISkeHfJm&export=download]
+   + 10-19 steps: File is readable by anyone at [Here][https://drive.google.com/uc?id=1yIc0KjZOzLG5rxftOH59aOCWErRQ06Au&export=download]
+
+ ## Show a few examples.
+
+
+
 ** Usage instructions.
 Show a few examples.

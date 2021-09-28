@@ -11,6 +11,8 @@ from tqdm import tqdm
 import time
 import logging
 
+from utils import from_gdrive_download
+
 import re
 
 from aug import get_normalize, get_resize
@@ -93,12 +95,12 @@ class Predictor:
 def main(img_pattern: str= '/home/jili_cw4/FDC_data/step[0-9]/*/CAM02/focusStep_*_[vt]*009*.tif',#'/home/jili_cw4/FDC_data/step7/Times/CAM02/focusStep_7_timesR_size_30_sample_009*.tif',#'/home/jili_cw4/FDC_data/Patches/Test/step7/Times_large_img/CAM02/*.png',#'/home/jili_cw4/FDC_data/step7/Times/CAM02/focusStep_7_timesR_size_30_sample_009*.tif',#'/home/jili_cw4/FDC_data/Patches/Test/step7/Times/CAM02/*.png',#step9/Times_large_img/CAM02/*.png',#'/home/jili_cw4/FDC_data/step7/Times/CAM02/focusStep_7_timesR_size_30_sample_009*.tif', #'/home/jili/Downloads/dd_dp_dataset_png/train_c/source/*.png', #/home/jili/real_dataset/*.jpg', #= '/home/jili/GOPRO_Large/train/*/blur/*.png'
          mask_pattern: Optional[str] = None, #'/home/jili/d3net_depth_estimation/dfd_datasets/dfd_outdoor/dfd_n28/*.JPG',#
          weights_path= 'checkpoints/hdc2021_0_9_best.h5',#'fdc_step7_dp_full_unet_l2_c1_01_last_my_fpn.h5',#'fdc_dp_last_my_fpn.h5',  #'defocus_dp_last_my_fpn.h5', #'best_fpn.h5.ori', #'defocus_best_my_fpn.h5', #best_fpn.h5.ori',
-         out_dir= '/home/jili_cw4/FDC_data/submit/HDC2021_0-9_sr/', #'/home/jili_cw4/yangziyi/test_more/',  #/home/jili/SelfDeblur/results/DeblurGAN-v2/Lai_REAL/',
+         out_dir= 'submit/HDC2021_0-9_sr/', #'/home/jili_cw4/yangziyi/test_more/',  #/home/jili/SelfDeblur/results/DeblurGAN-v2/Lai_REAL/',
          side_by_side: bool = False):
     def sorted_glob(pattern):
         return sorted(glob(pattern))
     # import os
-    os.environ['CUDA_VISIBLE_DEVICES'] = '2'
+    os.environ['CUDA_VISIBLE_DEVICES'] = '0'
     os.makedirs(out_dir, exist_ok=True)
     logging.basicConfig(filename= out_dir + 'runtime.log',
                         filemode='a',
@@ -110,6 +112,13 @@ def main(img_pattern: str= '/home/jili_cw4/FDC_data/step[0-9]/*/CAM02/focusStep_
     masks = sorted_glob(mask_pattern) if mask_pattern is not None else [None for _ in imgs]
     pairs = zip(imgs, masks)
     names = sorted([os.path.basename(x) for x in glob(img_pattern)])
+
+    # to check the existences, wether 
+    if not os.path.exists('checkpoints'):
+        os.makedirs('checkpoints',exist_ok=True)
+    if not os.path.exists(os.path.join('checkpoints', 'hdc2021_0_9_best.h5')) or not os.path.exists(os.path.join('checkpoints', 'hdc2021_10_19_best.h5')):
+        from_gdrive_download(save_path='checkpoints')
+
     predictor = Predictor(weights_path=weights_path)
 
     os.makedirs(out_dir, exist_ok=True)

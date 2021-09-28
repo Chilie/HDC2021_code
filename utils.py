@@ -24,5 +24,5 @@ def from_gdrive_download(save_path = None):
     print('Download is okay!')
 
     # untar the download files
-    extract(os.path.join(save_path, 'hdc2021_0_9_best.h5.tar.gz'),os.path.join(save_path, 'hdc2021_0_9_best.h5'))
-    extract(os.path.join(save_path, 'hdc2021_10_19_best.h5.tar.gz'),os.path.join(save_path, 'hdc2021_10_19_best.h5'))
+    extract(os.path.join(save_path, 'hdc2021_0_9_best.h5.tar.gz'),os.path.join(save_path))
+    extract(os.path.join(save_path, 'hdc2021_10_19_best.h5.tar.gz'),os.path.join(save_path))
