@@ -6,9 +6,7 @@ from typing import Optional
 import cv2
 import numpy as np
 import torch
-from torch.nn.modules import instancenorm
 import yaml
-# from fire import Fire
 from tqdm import tqdm
 import time
 import logging
@@ -79,12 +77,6 @@ class Predictor:
         self.model = model.cuda() if int(opt.gpu_id) >= 0 else model
         if isinstance(self.model, torch.nn.DataParallel):
             self.model = self.model.module
-        # print(self.model.device)
-        # self.model.train(True)
-        # # GAN inference should be in train mode to use actual stats in norm layers,
-        # # it's not a bug
-        # self.normalize_fn = get_normalize()
-        # self.resize = get_resize()
     @staticmethod
     def _array_to_batch(x):
         x = np.transpose(x, (2, 0, 1))
@@ -136,9 +128,7 @@ class Predictor:
 
     def __call__(self, img: np.ndarray, cond: np.ndarray,mask: Optional[np.ndarray], ignore_mask=True) -> np.ndarray:
         (img, mask), h, w = self._preprocess(img, mask)
-        # print(img.shape)
         with torch.no_grad():
-            # inputs = [img.cuda(), torch.from_numpy(np.expand_dims(cond, 0)).cuda()]
             inputs = [img.to(device), torch.from_numpy(np.expand_dims(cond, 0)).to(device)]
             if not ignore_mask:
                 inputs += [mask]
@@ -150,49 +140,31 @@ class Predictor:
 
 
 
-def main(img_pattern: str= opt.input_path,#'/home/jili_cw4/FDC_data/step7/Times/CAM02/focusStep_7_timesR_size_30_sample_009*.tif',#'/home/jili_cw4/FDC_data/Patches/Test/step7/Times_large_img/CAM02/*.png',#'/home/jili_cw4/FDC_data/step7/Times/CAM02/focusStep_7_timesR_size_30_sample_009*.tif',#'/home/jili_cw4/FDC_data/Patches/Test/step7/Times/CAM02/*.png',#step9/Times_large_img/CAM02/*.png',#'/home/jili_cw4/FDC_data/step7/Times/CAM02/focusStep_7_timesR_size_30_sample_009*.tif', #'/home/jili/Downloads/dd_dp_dataset_png/train_c/source/*.png', #/home/jili/real_dataset/*.jpg', #= '/home/jili/GOPRO_Large/train/*/blur/*.png'
-         weights_path= opt.checkpoint_path,#'fdc_step7_dp_full_unet_l2_c1_01_last_my_fpn.h5',#'fdc_dp_last_my_fpn.h5',  #'defocus_dp_last_my_fpn.h5', #'best_fpn.h5.ori', #'defocus_best_my_fpn.h5', #best_fpn.h5.ori',
-         out_dir= opt.output_path, #'/home/jili_cw4/yangziyi/test_more/',  #/home/jili/SelfDeblur/results/DeblurGAN-v2/Lai_REAL/',
+def main(img_pattern: str= opt.input_path,
+         weights_path= opt.checkpoint_path,
+         out_dir= opt.output_path,
          blur_level = opt.blur_level,
-         side_by_side: bool = False):
+         side_by_side: bool = opt.side_by_side):
     
     img_path = get_paths_from_images(img_pattern)
     imgs = sorted_glob(img_path)
-    # print(imgs)
-    # print(len(imgs))
-    # masks = sorted_glob(mask_pattern) if mask_pattern is not None else [None for _ in imgs]
+    
     names = [os.path.basename(x) for x in imgs]
-    # print(len(names))
-    # print(names)
     predictor = Predictor(weights_path=weights_path)
 
     os.makedirs(out_dir, exist_ok=True)
     
     for name, f_img in tqdm(zip(names, imgs), total=len(names)):
-        # print(f_img)
         img = cv2.imread(f_img)
-        # mask = cv2.imread(None)
-        # img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        # out = re.findall(r'\d+', f_img)
-        # out2 = [int(s) for s in out]
         if blur_level >= 10:
             blur_level = blur_level-10
         cond = np.array(blur_level)
-        # print(type(cond))
-        # img = z['image']
         t = time.time()
-        # img = rgb2lin_v1(img)
-        # print(img.shape)
-        # print(cond.shape)
         pred = predictor(img, cond, None)
         elapsed = time.time() - t
         logging.info('names%s time%.5f' % (name, elapsed))
         if side_by_side:
             pred = np.hstack((img, pred))
-        # print(pred.shape)
-        # c,d = os.path.split(f_img)
-        # app = os.sep.join(c.split(os.sep)[-3:])
-        # os.makedirs(out_dir+app, exist_ok=True)
         name = os.path.basename(f_img)
         filename = os.path.splitext(name)[0]
         cv2.imwrite(os.path.join(out_dir, filename + '.png'),
@@ -200,5 +172,4 @@ def main(img_pattern: str= opt.input_path,#'/home/jili_cw4/FDC_data/step7/Times/
 
 
 if __name__ == '__main__':
-    # Fire(main)
     main()
