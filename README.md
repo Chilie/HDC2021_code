@@ -14,8 +14,6 @@ Below is the information for the authors.
 
  This code repository is uploaded for competition of Helsinki Deblur Challenge 2021.
 
-** Installation instructions, including any requirements.
-See the +requirements.txt+ to install the dependent packages and libraries.
  ## Installation instructions, including any requirements
 See the ```requirement.txt``` to install the dependent packages and libraries.
 
