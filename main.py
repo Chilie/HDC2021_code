@@ -55,7 +55,7 @@ if not os.path.exists('checkpoints'):
 if not os.path.exists(os.path.join('checkpoints', 'hdc2021_0_9_last.h5')) or not os.path.exists(os.path.join('checkpoints', 'hdc2021_10_19_last.h5')):
     from_gdrive_download(save_path='checkpoints')
 
-if not opt.blur_level:
+if opt.blur_level is None:
     out = re.findall(r'\d+', names[0])
     out2 = [int(s) for s in out]
     opt.blur_level = out2[1]
