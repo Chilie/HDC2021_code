@@ -33,8 +33,8 @@ See the ```requirement.txt``` to install the dependent packages and librairies.
     ```
  + Use the gdown to obtained the trainning checkpoints in google driver. The following links is used in our evaluations.
 
-   +  0-9 steps: File is readable by anyone at [Here](https://drive.google.com/uc?id=1K6x7WjNfwmYscp8jFTV2hhn2ISkeHfJm&export=download)
-   + 10-19 steps: File is readable by anyone at [Here](https://drive.google.com/uc?id=1yIc0KjZOzLG5rxftOH59aOCWErRQ06Au&export=download)
+   +  0-9 steps: File is readable by anyone at [Here](https://drive.google.com/uc?id=1WjWqCFOiPtEced1fIN3uzSNa3KlBLvep&export=download)
+   + 10-19 steps: File is readable by anyone at [Here](https://drive.google.com/uc?id=1uofTwmzm42NH44ETRpaN9aolXh6sNR6r&export=download)
 
  ## Show a few examples.
 

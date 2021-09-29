@@ -15,13 +15,13 @@ def extract(tar_path, target_path):
         print(e)
 
 def from_gdrive_download(save_path = None):
-    url = 'https://drive.google.com/uc?id=1K6x7WjNfwmYscp8jFTV2hhn2ISkeHfJm'
-    output = 'hdc2021_0_9_best.h5.tar.gz'
+    url = 'https://drive.google.com/uc?id=1WjWqCFOiPtEced1fIN3uzSNa3KlBLvep'
+    output = 'hdc2021_0_9_last.h5.tar.gz'
     gdown.download(url, os.path.join(save_path, output),quiet=False)
     print('Download is okay!')
 
-    url = 'https://drive.google.com/uc?id=1yIc0KjZOzLG5rxftOH59aOCWErRQ06Au'
-    output = 'hdc2021_10_19_best.h5.tar.gz'
+    url = 'https://drive.google.com/uc?id=1uofTwmzm42NH44ETRpaN9aolXh6sNR6r'
+    output = 'hdc2021_10_19_last.h5.tar.gz'
     gdown.download(url, os.path.join(save_path, output),quiet=False)
     print('Download is okay!')
 
