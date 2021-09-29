@@ -54,7 +54,7 @@ names = sorted([os.path.basename(x) for x in glob(opt.input_path)])
 # to check the existences, wether 
 if not os.path.exists('checkpoints'):
     os.makedirs('checkpoints',exist_ok=True)
-if not os.path.exists(os.path.join('checkpoints', 'hdc2021_0_9_best.h5')) or not os.path.exists(os.path.join('checkpoints', 'hdc2021_10_19_best.h5')):
+if not os.path.exists(os.path.join('checkpoints', 'hdc2021_0_9_last.h5')) or not os.path.exists(os.path.join('checkpoints', 'hdc2021_10_19_last.h5')):
     from_gdrive_download(save_path='checkpoints')
 
 if not opt.blur_level:
@@ -63,9 +63,9 @@ if not opt.blur_level:
     opt.blur_level = out2[1]
         
 if opt.blur_level >= 10:
-    opt.checkpoint_path = 'checkpoints/hdc2021_10_19_best.h5'
+    opt.checkpoint_path = 'checkpoints/hdc2021_10_19_last.h5'
 else:
-    opt.checkpoint_path = 'checkpoints/hdc2021_0_9_best.h5'
+    opt.checkpoint_path = 'checkpoints/hdc2021_0_9_last.h5'
 
 device = 'cuda' if int(opt.gpu_id) >=0 else 'cpu'
 
@@ -83,8 +83,8 @@ class Predictor:
         # self.model.train(True)
         # # GAN inference should be in train mode to use actual stats in norm layers,
         # # it's not a bug
-        self.normalize_fn = get_normalize()
-        self.resize = get_resize()
+        # self.normalize_fn = get_normalize()
+        # self.resize = get_resize()
     @staticmethod
     def _array_to_batch(x):
         x = np.transpose(x, (2, 0, 1))
@@ -92,7 +92,9 @@ class Predictor:
         return torch.from_numpy(x)
 
     def _preprocess(self, x: np.ndarray, mask: Optional[np.ndarray]):
-
+        h,w,_ = x.shape
+        self.normalize_fn = get_normalize()
+        self.resize = get_resize(resize_to=(h//2,w//2))
         x, _ = self.resize(x,x)
         x, _ = self.normalize_fn(x, x)
         if mask is None:

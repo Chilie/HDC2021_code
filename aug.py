@@ -2,15 +2,15 @@ from typing import List
 
 import albumentations as albu
 
-def get_resize():
-    pipeline = albu.Compose([albu.Resize(730, 1180)], additional_targets={'target': 'image'}) #600,600
+def get_resize(resize_to=(730,1180)):
+    pipeline = albu.Compose([albu.Resize(*resize_to)], additional_targets={'target': 'image'}) #600,600
     def process(a, b):
         r = pipeline(image=a, target=b)
         return r['image'], r['target']
 
     return process
 
-def get_transforms(size: int, scope: str = 'geometric', crop='random'):
+def get_transforms(size: int, scope: str = 'geometric', crop='random', resize_to=(730,1180)):
     augs = {'strong': albu.Compose([albu.HorizontalFlip(),
                                     albu.ShiftScaleRotate(shift_limit=0.0, scale_limit=0.2, rotate_limit=20, p=.4),
                                     albu.ElasticTransform(),
@@ -42,7 +42,7 @@ def get_transforms(size: int, scope: str = 'geometric', crop='random'):
                'center': albu.CenterCrop(size, size, always_apply=True)}[crop]
     pad = albu.PadIfNeeded(size, size)
 
-    pipeline = albu.Compose([albu.Resize(730, 1180), aug_fn, crop_fn, pad], additional_targets={'target': 'image'})
+    pipeline = albu.Compose([albu.Resize(*resize_to), aug_fn, crop_fn, pad], additional_targets={'target': 'image'})
 
     def process(a, b):
         r = pipeline(image=a, target=b)
