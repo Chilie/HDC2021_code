@@ -90,15 +90,15 @@ class Predictor:
         return self._postprocess(pred)[:h, :w, :]
 
 
-def main(img_pattern: str= '/home/jili_cw4/FDC_data/step1[0-9]/*/CAM02/focusStep_*_[vt]*009*.tif',#'/home/jili_cw4/FDC_data/step7/Times/CAM02/focusStep_7_timesR_size_30_sample_009*.tif',#'/home/jili_cw4/FDC_data/Patches/Test/step7/Times_large_img/CAM02/*.png',#'/home/jili_cw4/FDC_data/step7/Times/CAM02/focusStep_7_timesR_size_30_sample_009*.tif',#'/home/jili_cw4/FDC_data/Patches/Test/step7/Times/CAM02/*.png',#step9/Times_large_img/CAM02/*.png',#'/home/jili_cw4/FDC_data/step7/Times/CAM02/focusStep_7_timesR_size_30_sample_009*.tif', #'/home/jili/Downloads/dd_dp_dataset_png/train_c/source/*.png', #/home/jili/real_dataset/*.jpg', #= '/home/jili/GOPRO_Large/train/*/blur/*.png'
-         mask_pattern: Optional[str] = None, #'/home/jili/d3net_depth_estimation/dfd_datasets/dfd_outdoor/dfd_n28/*.JPG',#
+def main(img_pattern: str= '/home/jili_cw4/FDC_data/step1[0-9]/*/CAM02/focusStep_*_[vt]*0099.tif',#'/home/jili_cw4/FDC_data/step7/Times/CAM02/focusStep_7_timesR_size_30_sample_009*.tif',#'/home/jili_cw4/FDC_data/Patches/Test/step7/Times_large_img/CAM02/*.png',#'/home/jili_cw4/FDC_data/step7/Times/CAM02/focusStep_7_timesR_size_30_sample_009*.tif',#'/home/jili_cw4/FDC_data/Patches/Test/step7/Times/CAM02/*.png',#step9/Times_large_img/CAM02/*.png',#'/home/jili_cw4/FDC_data/step7/Times/CAM02/focusStep_7_timesR_size_30_sample_009*.tif', #'/home/jili/Downloads/dd_dp_dataset_png/train_c/source/*.png', #/home/jili/real_dataset/*.jpg', #= '/home/jili/GOPRO_Large/train/*/blur/*.png'
+         mask_pattern: Optional[str] = None, #'[0-9]/home/jili/d3net_depth_estimation/dfd_datasets/dfd_outdoor/dfd_n28/*.JPG',#
          weights_path= 'checkpoints/hdc2021_10_19_last.h5',#'fdc_step7_dp_full_unet_l2_c1_01_last_my_fpn.h5',#'fdc_dp_last_my_fpn.h5',  #'defocus_dp_last_my_fpn.h5', #'best_fpn.h5.ori', #'defocus_best_my_fpn.h5', #best_fpn.h5.ori',
-         out_dir= '/home/jili_cw4/FDC_data/submit/HDC2021_10-19_sr_last_flip/', #'/home/jili_cw4/yangziyi/test_more/',  #/home/jili/SelfDeblur/results/DeblurGAN-v2/Lai_REAL/',
-         side_by_side: bool = False):
+         out_dir= '/home/jili_cw4/FDC_data/submit/HDC2021_10-19_comp_last_examp', #'/home/jili_cw4/yangziyi/test_more/',  #/home/jili/SelfDeblur/results/DeblurGAN-v2/Lai_REAL/',
+         side_by_side: bool = True):
     def sorted_glob(pattern):
         return sorted(glob(pattern))
     # import os
-    os.environ['CUDA_VISIBLE_DEVICES'] = '2'
+    os.environ['CUDA_VISIBLE_DEVICES'] = '3'
     os.makedirs(out_dir, exist_ok=True)
     logging.basicConfig(filename= out_dir + 'runtime.log',
                         filemode='a',
@@ -126,9 +126,12 @@ def main(img_pattern: str= '/home/jili_cw4/FDC_data/step1[0-9]/*/CAM02/focusStep
         # img = z['image']
         t = time.time()
         # img = rgb2lin_v1(img)
-        img = cv2.flip(img,-1)
+        # img = cv2.flip(img,-1)
+        print(img.shape)
         pred = predictor(img, cond,mask)
-        pred = cv2.flip(pred,-1)
+        print(pred.shape)
+
+        # pred = cv2.flip(pred,-1)
         elapsed = time.time() - t
         logging.info('names%s time%.5f' % (name, elapsed))
         if side_by_side:
@@ -137,9 +140,14 @@ def main(img_pattern: str= '/home/jili_cw4/FDC_data/step1[0-9]/*/CAM02/focusStep
         c,d = os.path.split(f_img)
         # app = os.sep.join(c.split(os.sep)[-3:])
         # os.makedirs(out_dir+app, exist_ok=True)
+
+        # name = os.path.basename(f_img)
+        # cv2.imwrite(os.path.join(out_dir, name),
+        #             pred)
         name = os.path.basename(f_img)
-        cv2.imwrite(os.path.join(out_dir, name),
-                    pred)
+        filename = os.path.splitext(name)[0]
+        cv2.imwrite(os.path.join(out_dir, filename + '.png'),
+                    pred[:,:,0])
 
 # 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
 

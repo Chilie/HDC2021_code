@@ -115,7 +115,8 @@ class FPNInceptionCCSR(nn.Module):
         super().__init__()
 
         self.fpninceptioncc = FPNInceptionCC(norm_layer=norm_layer,output_ch=output_ch)
-        self.fpninceptioncc = self.fpninceptioncc.cuda()
+        # self.fpninceptioncc = self.fpninceptioncc.cuda()
+        
         # The segmentation heads on top of the FPN
         # with open('config/config_sr_0-9.yaml') as cfg:
         #     config = yaml.load(cfg)

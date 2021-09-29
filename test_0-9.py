@@ -132,6 +132,7 @@ def main(img_pattern: str= '/home/jili_cw4/FDC_data/step[0-9]/*/CAM02/focusStep_
         if out2[1] >= 10:
             out2[1] = out2[1]-10
         cond = np.array(out2[1])
+        # print(cond.shape)
         # img = z['image']
         t = time.time()
         # img = rgb2lin_v1(img)

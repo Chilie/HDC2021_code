@@ -33,12 +33,16 @@ See the ```requirement.txt``` to install the dependent packages and librairies.
     ```
  + Use the gdown to obtained the trainning checkpoints in google driver. The following links is used in our evaluations.
 
-   +  0-9 steps: File is readable by anyone at [Here][https://drive.google.com/uc?id=1K6x7WjNfwmYscp8jFTV2hhn2ISkeHfJm&export=download]
-   + 10-19 steps: File is readable by anyone at [Here][https://drive.google.com/uc?id=1yIc0KjZOzLG5rxftOH59aOCWErRQ06Au&export=download]
+   +  0-9 steps: File is readable by anyone at [Here](https://drive.google.com/uc?id=1K6x7WjNfwmYscp8jFTV2hhn2ISkeHfJm&export=download)
+   + 10-19 steps: File is readable by anyone at [Here](https://drive.google.com/uc?id=1yIc0KjZOzLG5rxftOH59aOCWErRQ06Au&export=download)
 
  ## Show a few examples.
 
+Below we show two exmaples of our deblurring performance
+ + Input image is `step14/Times/CAM02/focusStep_14_timesR_size_30_sample_0099.tif`, the input and deblurred image is
+    ![Example 1](./examples/focusStep_14_timesR_size_30_sample_0099.png)
 
-
+ + Input image is `step19/Verdana/CAM02/focusStep_19_verdanaRef_size_30_sample_0099.tif`
+    ![Example 2](./examples/focusStep_19_verdanaRef_size_30_sample_0099.png)
 ** Usage instructions.
 Show a few examples.

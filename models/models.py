@@ -47,8 +47,9 @@ class DeblurModelsr(nn.Module):
         cond = data['cond'] if data.get('cond') is not None else None
         # else:
         #     cond = data['cond']
-        inputs, cond = inputs.cuda(), cond.cuda()
-        targets = [t.cuda() for t in targets]
+        
+        # inputs, cond = inputs.cuda(), cond.cuda()
+        # targets = [t.cuda() for t in targets]
         return inputs, targets, cond
 
     def tensor2im(self, image_tensor, imtype=np.uint8):

@@ -1,6 +1,7 @@
 <<<<<<< HEAD
 *.h5
 __pycache__/
+hdc2021/
 # .gitignore
 submit/*
 checkpoints/*
