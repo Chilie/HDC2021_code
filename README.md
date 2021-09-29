@@ -1,10 +1,10 @@
 # Code for Helsinki Deblur Challenge 2021
-## Authors, institution, location.
+## Authors, institution, location
 Below is the information for the authors.
  + *Author*       Ji Li
  + *Institution*  Department of Mathematics, National University of Singapore
- + *Location*.    21 Lower Kent Ridge Rd, Singapore 119077    
-## Brief description of your algorithm and a mention of the competition.
+ + *Location*    21 Lower Kent Ridge Rd, Singapore 119077    
+## Brief description of your algorithm and a mention of the competition
  Our deblurring algorithm is a deep learning approach, as there have been provided the training datasets. Our deblurring network backbone is borrowed from the DeblurGanV2. Note that we have not used the GAN training loss. 
  
  For this task, the blurring level is very high. And we find in the training stage, it is hard to decrease the training loss. To address such issue, we proposed the following modifications:
@@ -13,10 +13,10 @@ Below is the information for the authors.
 
 ** Installation instructions, including any requirements.
 See the +requirement.txt+ to install the dependent packages and librairies.
- ## Installation instructions, including any requirements.
+ ## Installation instructions, including any requirements
 See the ```requirement.txt``` to install the dependent packages and librairies.
 
- ## Usage instructions.
+ ## Usage instructions
  + Clone the github repository
    
    ```python
@@ -29,14 +29,15 @@ See the ```requirement.txt``` to install the dependent packages and librairies.
     virtualenv --no-site-packages --python=python3 hdc2021
     source hdc2021/bin/activate # enter the vironment
     pip3 install -r requirements.txt # install the dependency 
-    deactivate
+    # deactivate
     ```
  + Use the gdown to obtained the trainning checkpoints in google driver. The following links is used in our evaluations.
 
    +  0-9 steps: File is readable by anyone at [Here](https://drive.google.com/uc?id=1WjWqCFOiPtEced1fIN3uzSNa3KlBLvep&export=download)
    + 10-19 steps: File is readable by anyone at [Here](https://drive.google.com/uc?id=1uofTwmzm42NH44ETRpaN9aolXh6sNR6r&export=download)
 
- ## Show a few examples.
+ 
+ ## Show a few examples
 
 Below we show two exmaples of our deblurring performance
  + Input image is `step14/Times/CAM02/focusStep_14_timesR_size_30_sample_0099.tif`, the input and deblurred image is
@@ -44,5 +45,5 @@ Below we show two exmaples of our deblurring performance
 
  + Input image is `step19/Verdana/CAM02/focusStep_19_verdanaRef_size_30_sample_0099.tif`
     ![Example 2](./examples/focusStep_19_verdanaRef_size_30_sample_0099.png)
-** Usage instructions.
-Show a few examples.
+
+
