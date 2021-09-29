@@ -8,7 +8,7 @@ import numpy as np
 import torch
 from torch.nn.modules import instancenorm
 import yaml
-from fire import Fire
+# from fire import Fire
 from tqdm import tqdm
 import time
 import logging
